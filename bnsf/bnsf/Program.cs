@@ -2,23 +2,16 @@
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
-
 namespace bnsf
 {
-    static class Program
+    internal static class Program
     {
-        private static string path = @"C:\Program Files (x86)\NCSOFT\BnS\contents\Local\NCWEST\data\";
-        /// <summary>
-        /// Главная точка входа для приложения.
-        /// </summary>
+        private const string Path = @"C:\Program Files (x86)\NCSOFT\BnS\contents\Local\NCWEST\data\";
+
         [STAThread]
-        static void Main()
+        private static void Main()
         {
-            var th = new Thread(Thf);
-            th.Start();
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
+            new Thread(Thf).Start();
         }
         private static void Thf()
         {
@@ -26,16 +19,10 @@ namespace bnsf
             while (true)
             {
                 var p = Process.GetProcessesByName("Client").Length;
-                if (p == 1)
-                {
-                    if (pp == 0)
-                        File.Copy($"{path}editing\\xml64m.dat", $"{path}xml64.dat", true);
-                }
-                else
-                {
-                    if (pp == 1)
-                        File.Copy($"{path}editing\\xml64.dat", $"{path}xml64.dat", true);
-                }
+                if(p == 1 && pp == 0)
+                        File.Copy($"{Path}editing\\xml64m.dat", $"{Path}xml64.dat", true);
+                if (p == 0 && pp == 1)
+                        File.Copy($"{Path}editing\\xml64.dat", $"{Path}xml64.dat", true);
                 pp = p;
                 Thread.Sleep(1000);
             }
